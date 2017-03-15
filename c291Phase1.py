@@ -1,3 +1,101 @@
+#recursively checks a string for certain illegal term characters such as:
+#!@#$%^&*()+?/ and seperates the string into multiple strings at the index 
+#of the illegal character. The string/strings are then added to termsList.
+def addTerm(termsList, termgroup): 
+	if "." in termgroup:
+		index = termgroup.index(".")
+		if index != 0:
+			addTerm(termsList, termgroup[:index])
+		if index != len(termgroup) - 1:
+			addTerm(termsList,termgroup[index+1:])
+	elif "," in termgroup:
+		index = termgroup.index(",")
+		if index != 0:
+			addTerm(termsList, termgroup[:index])
+		if index != len(termgroup) - 1:
+			addTerm(termsList, termgroup[index+1:])
+	elif "!" in termgroup:
+		index = termgroup.index("!")
+		if index != 0:
+			addTerm(termsList, termgroup[:index])
+		if index != len(termgroup) - 1:
+			addTerm(termsList, termgroup[index+1:])
+	elif "@" in termgroup:
+		index = termgroup.index("@")
+		if index != 0:
+			addTerm(termsList, termgroup[:index])
+		if index != len(termgroup) - 1:
+			addTerm(termsList, termgroup[index+1:])
+	elif "#" in termgroup:
+		index = termgroup.index("#")
+		if index != 0:
+			addTerm(termsList, termgroup[:index])
+		if index != len(termgroup) - 1:
+			addTerm(termsList, termgroup[index+1:])
+	elif "$" in termgroup:
+		index = termgroup.index("$")
+		if index != 0:
+			addTerm(termsList, termgroup[:index])
+		if index != len(termgroup) - 1:
+			addTerm(termsList, termgroup[index+1:])
+	elif "%" in termgroup:
+		index = termgroup.index("%")
+		if index != 0:
+			addTerm(termsList, termgroup[:index])
+		if index != len(termgroup) - 1:
+			addTerm(termsList, termgroup[index+1:])
+	elif "^" in termgroup:
+		index = termgroup.index("^")
+		if index != 0:
+			addTerm(termsList, termgroup[:index])
+		if index != len(termgroup) - 1:
+			addTerm(termsList, termgroup[index+1:])
+	elif "&" in termgroup:
+		index = termgroup.index("&")
+		if index != 0:
+			addTerm(termsList, termgroup[:index])
+		if index != len(termgroup) - 1:
+			addTerm(termsList, termgroup[index+1:])
+	elif "*" in termgroup:
+		index = termgroup.index("*")
+		if index != 0:
+			addTerm(termsList, termgroup[:index])
+		if index != len(termgroup) - 1:
+			addTerm(termsList, termgroup[index+1:])
+	elif "(" in termgroup:
+		index = termgroup.index("(")
+		if index != 0:
+			addTerm(termsList, termgroup[:index])
+		if index != len(termgroup) - 1:
+			addTerm(termsList, termgroup[index+1:])
+	elif ")" in termgroup:
+		index = termgroup.index(")")
+		if index != 0:
+			addTerm(termsList, termgroup[:index])
+		if index != len(termgroup) - 1:
+			addTerm(termsList, termgroup[index+1:])
+	elif "?" in termgroup:
+		index = termgroup.index("?")
+		if index != 0:
+			addTerm(termsList, termgroup[:index])
+		if index != len(termgroup) - 1:
+			addTerm(termsList, termgroup[index+1:])
+	elif "+" in termgroup:
+		index = termgroup.index("+")
+		if index != 0:
+			addTerm(termsList, termgroup[:index])
+		if index != len(termgroup) - 1:
+			addTerm(termsList, termgroup[index+1:])
+	elif "/" in termgroup:
+		index = termgroup.index("/")
+		if index != 0:
+			addTerm(termsList, termgroup[:index])
+		if index != len(termgroup) - 1:
+			addTerm(termsList, termgroup[index+1:])
+	else:
+		if len(termgroup) > 2:
+			termsList.append(termgroup)
+
 file = open("10Records.xml", "r")
 for line in file:
 	lineList = line.split()
@@ -12,14 +110,14 @@ for line in file:
 		for wordIndex in range(len(lineList)):
 			if wordIndex > 2:
 				if lineList[wordIndex][-7:] == "</text>":
-					termsList.append(lineList[wordIndex][:-7])
+					addTerm(termsList,lineList[wordIndex][:-7])
 					break
 
 				if len(lineList[wordIndex]) > 2:
 					if wordIndex == 3:
-						termsList.append(lineList[wordIndex][6:])
+						addTerm(termsList,lineList[wordIndex][6:])
 					else:
-						termsList.append(lineList[wordIndex])
+						addTerm(termsList,lineList[wordIndex])
 		
 		for wordIndex in range(len(termsList)):
 			termsList[wordIndex] = termsList[wordIndex]+":"
