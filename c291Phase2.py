@@ -1,4 +1,10 @@
-from bsddb3 import db
+from bsddb3 import
+import subprocess
+
+#Uniqely sort a file and return the output
+def sortFile(file):
+	return subprocess.check_output(["sort", "-u", file])
+
 def main():
 	DATABASE_TWEETS = "tweets.db"
 	DATABASE_TERMS = "terms.db"
@@ -9,14 +15,16 @@ def main():
 	database_tweets.open(DATABASE_TWEETS,None, db.DB_HASH, db.DB_CREATE)
 	database_terms.open(DATABASE_TERMS,None, db.DB_BTREE, db.DB_CREATE)
 	database_dates.open(DATABASE_DATES,None, db.DB_BTREE, db.DB_CREATE)
-	
+
+
+	sortFile("tweets.txt")
 	file_tweets = open("tweets.txt", "r")
 	for line in file_tweets:
 		key_tweet = line[0:9]
 		data_tweet = line[10:-1]
-
 	file_tweets.close()
-	
+
+	sortFile("terms.txt")
 	file_terms = open("terms.txt", "r")
 	for line in file_terms:
 		key_term = ""
@@ -28,10 +36,11 @@ def main():
 			elif char != ":" and not key:
 				data_term = data_term+char
 			else:
-				key = False				
+				key = False
 		data_term = data_term[:-1]
 	file_terms.close()
-	
+
+	sortFile("dates.txt")
 	file_dates = open("dates.txt", "r")
 	for line in file_dates:
 		key_date = line[0:10]
