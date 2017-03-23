@@ -1,3 +1,4 @@
+#writes the organized data in lists to 3 files terms.txt, dates.txt, and tweets.txt
 def writeToFiles(termsList, datesList, tweetsList):
 	file1 = open("terms.txt", 'a')
 	for term in termsList:
