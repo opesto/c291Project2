@@ -1,4 +1,4 @@
-from bsddb3 import
+from bsddb3 import db
 import subprocess
 
 #Uniqely sort a file and return the output
