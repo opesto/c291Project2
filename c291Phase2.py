@@ -45,7 +45,6 @@ def main():
 	for line in file_dates:
 		key_date = line[0:10]
 		data_date = line[11:-1]
-
 	file_dates.close()
 
 	curs_tweets = database_tweets.cursor()
