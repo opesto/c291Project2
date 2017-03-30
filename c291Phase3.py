@@ -33,11 +33,25 @@ def search_k(keyword, cur, num=float('inf'), resume=None):
 	results = []
 	while iterator:
 		if keyword in iterator[0].decode('utf-8'):
-			results.append(iterator[1].decode('utf-8'))
+			results.append(iterator[1])
 		if len(results) >= num:
 			return (results, iterator[0])
 		iterator = cur.next()
 	return (results, None)
+
+# print tweets from id
+def fetch_tweets(tids):
+	tweet_db = db.DB()
+	tweet_db.open('tw.idx')
+	tweet_cur  = tweet_db.cursor()
+	raw_tweets = []
+	for tid in tids:
+		raw_tweets.append(tweet_cur.set(tid))
+	tweets = []
+	for tweet in raw_tweets:
+		parsed_tweet = xmltree.fromstring(tweet[1])
+		for tag in parsed_tweet:
+			print(tag.text)
 
 def search_all_terms(database, query):
 	cur = database.cursor()
@@ -47,7 +61,7 @@ def search_all_terms(database, query):
 		status = search_k(query[1], cur, MAX_RESULTS, resume)
 		resume = status[1]
 		results = status[0]
-		print(results)
+		fetch_tweets(results)
 		if resume is None:
 			print('End of results\n')
 			done = True
@@ -57,11 +71,17 @@ def search_all_terms(database, query):
 				done = True
 	cur.close()
 
+def search_field(database, query):
+	...
+
+def search_dates(database, query):
+	...
+
 def main():
 	query = get_query()
 	print()
 	database = db.DB()
-	if query[0] == 'text':
+	if query[0] == None:
 		database.open('te.idx')
 		search_all_terms(database, query)
 		database.close()
