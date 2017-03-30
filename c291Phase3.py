@@ -7,6 +7,11 @@ MAX_RESULTS = 5
 # read query from stdin
 def get_query():
 	query = input('query? ')
+	for j in range(len(query)):
+		if query[j] == " ":
+			get_query(query[:j])
+			get_query(query[j+1:])
+
 	for i in range(len(query)):
 		if query[i] == ':':
 			op = query[:i]
@@ -79,7 +84,9 @@ def search_dates(database, query):
 	...
 
 def main():
-	query = get_query()
+	queryList = []
+	queryList.append(get_query())
+	print(queryList)
 	print()
 	database = db.DB()
 	if query[0] == None:
