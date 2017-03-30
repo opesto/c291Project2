@@ -39,7 +39,7 @@ def search_k(keyword, cur, num=float('inf'), resume=None):
 		iterator = cur.next()
 	return (results, None)
 
-# print tweets from id
+# print tweets from ids (tids must be iterable)
 def fetch_tweets(tids):
 	tweet_db = db.DB()
 	tweet_db.open('tw.idx')
@@ -50,8 +50,9 @@ def fetch_tweets(tids):
 	tweets = []
 	for tweet in raw_tweets:
 		parsed_tweet = xmltree.fromstring(tweet[1])
-		for tag in parsed_tweet:
-			print(tag.text)
+		print(parsed_tweet[4][0].text)
+		print(parsed_tweet[2].text)
+		print('{}\n'.format(parsed_tweet[1].text))
 
 def search_all_terms(database, query):
 	cur = database.cursor()
