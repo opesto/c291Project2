@@ -6,12 +6,11 @@ MAX_RESULTS = 5
 
 # read query from stdin
 def get_query(query):
+	query = query.lower()
 	for i in range(len(query)):
 		if query[i] == ':':
 			op = query[:i]
-			op = op.lower()
 			arg = query[i+1:]
-			arg = arg.lower()
 			if op not in VALID_OPS:
 				print('invalid operation')
 				op = None
@@ -21,9 +20,7 @@ def get_query(query):
 			return((op, arg))
 		if query[i] == '>':
 			op = query[:i]
-			op = op.lower()
 			arg = query[i+1:]
-			arg = arg.lower()
 			if op not in VALID_OPS:
 				print('invalid operation')
 				op = None
@@ -33,9 +30,7 @@ def get_query(query):
 			return((op, arg))
 		if query[i] == '<':
 			op = query[:i]
-			op = op.lower()
 			arg = query[i+1:]
-			arg = arg.lower()
 			if op not in VALID_OPS:
 				print('invalid operation')
 				op = None
