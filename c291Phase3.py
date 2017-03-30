@@ -5,13 +5,7 @@ VALID_OPS = ('text', 'name', 'location', 'date', None)
 MAX_RESULTS = 5
 
 # read query from stdin
-def get_query():
-	query = input('query? ')
-	for j in range(len(query)):
-		if query[j] == " ":
-			get_query(query[:j])
-			get_query(query[j+1:])
-
+def get_query(query):
 	for i in range(len(query)):
 		if query[i] == ':':
 			op = query[:i]
@@ -59,7 +53,7 @@ def fetch_tweets(tids):
 		print(parsed_tweet[2].text)
 		print('{}\n'.format(parsed_tweet[1].text))
 
-def search_all_terms(database, query):
+def search_all_terms(database, query, ids):
 	cur = database.cursor()
 	done = False
 	resume = None
@@ -67,9 +61,9 @@ def search_all_terms(database, query):
 		status = search_k(query[1], cur, MAX_RESULTS, resume)
 		resume = status[1]
 		results = status[0]
-		fetch_tweets(results)
+		results = set(results)
+		ids.append(results)
 		if resume is None:
-			print('End of results\n')
 			done = True
 		else:
 			inp = input('\n See next {} results (y/n)?'.format(MAX_RESULTS))
@@ -77,31 +71,39 @@ def search_all_terms(database, query):
 				done = True
 	cur.close()
 
-def search_field(database, query):
+def search_field(database, query, ids):
 	...
 
-def search_dates(database, query):
+def search_dates(database, query, ids):
 	...
 
 def main():
-	queryList = []
-	queryList.append(get_query())
-	print(queryList)
+	queryList = input('query? ').split(' ')
+	queries = []
+	for i in range(len(queryList)):
+		queryList[i] = get_query(queryList[i])
 	print()
-	database = db.DB()
-	if query[0] == None:
-		database.open('te.idx')
-		search_all_terms(database, query)
-		database.close()
-	elif query[0] == 'dates':
-		#kiefer
-		database.open('da.idx')
-		search_dates(database, query)
-		database.close()
-	elif query[0] in ('location', 'name', 'text'):
-		#olivier
-		database.open('te.idx')
-		search_field(database, query)
-		database.close()
+	ids = []
+	for query in queryList:
+		database = db.DB()
+		if query[0] == None:
+			database.open('te.idx')
+			search_all_terms(database, query, ids)
+			database.close()
+		elif query[0] == 'dates':
+			#kiefer
+			database.open('da.idx')
+			search_dates(database, query, ids)
+			database.close()
+		elif query[0] in ('location', 'name', 'text'):
+			#olivier
+			database.open('te.idx')
+			search_field(database, query, ids)
+			database.close()
+	final_ids = ids[0]
+	for i in range(1, len(ids)):
+		final_ids = final_ids & ids[i]
+	final_ids = list(final_ids)
+	fetch_tweets(final_ids)
 	
 main()
