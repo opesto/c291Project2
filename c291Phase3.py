@@ -9,10 +9,39 @@ def get_query(query):
 	for i in range(len(query)):
 		if query[i] == ':':
 			op = query[:i]
+			op = op.lower()
 			arg = query[i+1:]
+			arg = arg.lower()
 			if op not in VALID_OPS:
 				print('invalid operation')
 				op = None
+			elif op == 'date':
+				datePrefix = ':'
+				return ((op, arg, datePrefix))
+			return((op, arg))
+		if query[i] == '>':
+			op = query[:i]
+			op = op.lower()
+			arg = query[i+1:]
+			arg = arg.lower()
+			if op not in VALID_OPS:
+				print('invalid operation')
+				op = None
+			elif op == 'date':
+				datePrefix = '>'
+				return ((op, arg, datePrefix))
+			return((op, arg))
+		if query[i] == '<':
+			op = query[:i]
+			op = op.lower()
+			arg = query[i+1:]
+			arg = arg.lower()
+			if op not in VALID_OPS:
+				print('invalid operation')
+				op = None
+			elif op == 'date':
+				datePrefix = '<'
+				return ((op, arg, datePrefix))
 			return((op, arg))
 		elif i == len(query) - 1:
 			return((None, query))
