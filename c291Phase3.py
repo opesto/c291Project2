@@ -32,16 +32,14 @@ def search_k(keyword, cur, num=float('inf'), resume=None):
 		iterator = cur.first()
 	results = []
 	while iterator:
-		tweet = xmltree.fromstring(iterator[1])
-		if keyword in tweet[2].text:
-			print(iterator[0])
-			results.append(tweet)
+		if keyword in iterator[0].decode('utf-8'):
+			results.append(iterator[1].decode('utf-8'))
 		if len(results) >= num:
 			return (results, iterator[0])
 		iterator = cur.next()
 	return (results, None)
 
-def search(database, query):
+def search_all_terms(database, query):
 	cur = database.cursor()
 	done = False
 	resume = None
@@ -49,7 +47,7 @@ def search(database, query):
 		status = search_k(query[1], cur, MAX_RESULTS, resume)
 		resume = status[1]
 		results = status[0]
-		print_results_tw(results)
+		print(results)
 		if resume is None:
 			print('End of results\n')
 			done = True
@@ -65,7 +63,17 @@ def main():
 	database = db.DB()
 	if query[0] == 'text':
 		database.open('te.idx')
-		search(database, query)
+		search_all_terms(database, query)
+		database.close()
+	elif query[0] == 'dates':
+		#kiefer
+		database.open('da.idx')
+		search_dates(database, query)
+		database.close()
+	elif query[0] in ('location', 'name', 'text'):
+		#olivier
+		database.open('te.idx')
+		search_field(database, query)
 		database.close()
 	
 main()
