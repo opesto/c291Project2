@@ -18,7 +18,7 @@ def get_query(query):
 				datePrefix = ':'
 				return ((op, arg, datePrefix))
 			return((op, arg))
-		if query[i] == '>':
+		elif query[i] == '>':
 			op = query[:i]
 			arg = query[i+1:]
 			if op not in VALID_OPS:
@@ -28,7 +28,7 @@ def get_query(query):
 				datePrefix = '>'
 				return ((op, arg, datePrefix))
 			return((op, arg))
-		if query[i] == '<':
+		elif query[i] == '<':
 			op = query[:i]
 			arg = query[i+1:]
 			if op not in VALID_OPS:
