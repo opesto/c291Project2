@@ -10,10 +10,39 @@ def get_query():
 	for i in range(len(query)):
 		if query[i] == ':':
 			op = query[:i]
+			op = op.lower()
 			arg = query[i+1:]
+			arg = arg.lower()
 			if op not in VALID_OPS:
 				print('invalid operation')
 				op = None
+			elif op == 'date':
+				datePrefix = ':'
+				return ((op, arg, datePrefix))
+			return((op, arg))
+		if query[i] == '>':
+			op = query[:i]
+			op = op.lower()
+			arg = query[i+1:]
+			arg = arg.lower()
+			if op not in VALID_OPS:
+				print('invalid operation')
+				op = None
+			elif op == 'date':
+				datePrefix = '>'
+				return ((op, arg, datePrefix))
+			return((op, arg))
+		if query[i] == '<':
+			op = query[:i]
+			op = op.lower()
+			arg = query[i+1:]
+			arg = arg.lower()
+			if op not in VALID_OPS:
+				print('invalid operation')
+				op = None
+			elif op == 'date':
+				datePrefix = '<'
+				return ((op, arg, datePrefix))
 			return((op, arg))
 		elif i == len(query) - 1:
 			return((None, query))
@@ -71,14 +100,15 @@ def search_all_terms(database, query):
 				done = True
 	cur.close()
 
-def search_field(database, query):
-	...
+#def search_field(database, query):
+#	...
 
-def search_dates(database, query):
-	...
+#def search_dates(database, query):
+#	...
 
 def main():
 	query = get_query()
+	print(query)
 	print()
 	database = db.DB()
 	if query[0] == None:
