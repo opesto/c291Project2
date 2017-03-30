@@ -6,4 +6,4 @@ rm tw.idx da.idx te.idx > /dev/null #pipe to null
 #                                                                       load with db_load    output to tw.idx
 sort -u tweets.txt | perl -lpe 's/^([^:]*):/$1\n/g;' -lpe 's/\\/&92;/g' | db_load -T -t hash tw.idx
 sort -u dates.txt | perl -lpe 's/^([^:]*):/$1\n/g;' -lpe 's/\\/&92;/g' | db_load -T -t btree da.idx
-sort -u tweets.txt | perl -lpe 's/^([^:]*):/$1\n/g;' -lpe 's/\\/&92;/g' | db_load -T -t btree te.idx
+sort -u terms.txt | perl -lpe 's/^([^:]*):/$1\n/g;' -lpe 's/\\/&92;/g' | db_load -T -t btree te.idx
