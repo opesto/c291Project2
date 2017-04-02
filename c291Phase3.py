@@ -1,5 +1,6 @@
 from bsddb3 import db
 import xml.etree.ElementTree as xmltree
+import re
 
 VALID_OPS = ('text', 'name', 'location', 'date', None)
 MAX_RESULTS = 5
@@ -59,10 +60,19 @@ def search_k(keyword, cur, num=float('inf'), resume=None):
 		iterator = cur.set(resume)
 	else:
 		iterator = cur.first()
-	results = []
+	results = set()
+	_keyword = []
+	for i in range(len(keyword)):
+		if keyword[i] == '%':
+			_keyword.append('.*')
+		else:
+			_keyword.append(keyword[i])
+	if '%' not in keyword:
+		_keyword.insert(0, '^[tbl]-')
+	keyword = ''.join(_keyword)
 	while iterator:
-		if keyword in iterator[0].decode('utf-8'):
-			results.append(iterator[1])
+		if re.search(keyword, iterator[0].decode('utf-8'), flags=re.I | re.M):
+			results.add(iterator[1])
 		if len(results) >= num:
 			return (results, iterator[0])
 		iterator = cur.next()
@@ -108,7 +118,6 @@ def search_all_terms(database, query):
 
 def main():
 	query = get_query()
-	print(query)
 	print()
 	database = db.DB()
 	if query[0] == None:
