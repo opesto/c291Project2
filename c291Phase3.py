@@ -141,6 +141,19 @@ def main():
 	for i in range(1, len(ids)):
 		final_ids = final_ids & ids[i]
 	final_ids = list(final_ids)
-	fetch_tweets(final_ids)
-	
+	resume = 1
+	while True:
+		fetch_tweets(final_ids[resume:resume + MAX_RESULTS])
+		print('{} - {} / {} results shown'.format(resume, \
+		min((resume + MAX_RESULTS, len(final_ids))), len(final_ids)))
+		resume += MAX_RESULTS
+		if resume > len(final_ids):
+			break
+		print('Show next {}? (y/n)'.format(MAX_RESULTS))
+		inp = input()
+		print()
+		if inp == 'n':
+			break
+	print('End of results.')
+
 main()
