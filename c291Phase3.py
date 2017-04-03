@@ -51,7 +51,7 @@ def print_results_tw(results):
 			print(element.text)
 
 # search a text field for a keyword
-def search_k(keyword, cur, prefix='^[tbln]-'):
+def search_k(keyword, cur, prefix='^[tln]-'):
 	results = []
 	_keyword = []
 	for i in range(len(keyword)):
@@ -84,10 +84,10 @@ def fetch_tweets(tids):
 		print(parsed_tweet[2].text)
 		print('{}\n'.format(parsed_tweet[1].text))
 
-def search_all_terms(database, query, ids, resume):
+def search_text(database, query, ids, prefix='^[tln]-'):
 	cur = database.cursor()
 	cur.first()
-	status = search_k(query[1], cur)
+	status = search_k(query[1], cur, prefix=prefix)
 	results = status[0]
 	results = set(results)
 	ids.append(results)
@@ -164,7 +164,7 @@ def main():
 		if query[0] == None:
 			database.open('te.idx')
 			resume = None
-			search_all_terms(database, query, ids, resume)
+			search_text(database, query, ids)
 			database.close()
 		elif query[0] == 'date':
 			#kiefer
@@ -173,13 +173,32 @@ def main():
 			database.close()
 		elif query[0] in ('location', 'name', 'text'):
 			#olivier
+			if query[0] == 'location':
+				prefix = '^l-'
+			elif query[0] == 'name':
+				prefix = '^n-'
+			elif query[0] == 'text':
+				prefix = '^t-'
 			database.open('te.idx')
-			search_field(database, query, ids)
+			search_text(database, query, ids, prefix=prefix)
 			database.close()
 	final_ids = ids[0]
 	for i in range(1, len(ids)):
 		final_ids = final_ids & ids[i]
 	final_ids = list(final_ids)
-	fetch_tweets(final_ids)
-	
+	resume = 0
+	while True:
+		fetch_tweets(final_ids[resume:resume + MAX_RESULTS])
+		print('{} - {} / {} results shown'.format(resume + 1, \
+		min((resume + MAX_RESULTS, len(final_ids))), len(final_ids)))
+		resume += MAX_RESULTS
+		if resume >= len(final_ids):
+			break
+		print('Show next {}? (y/n)'.format(MAX_RESULTS))
+		inp = input()
+		print()
+		if inp == 'n':
+			break
+	print('End of results.')
+
 main()
