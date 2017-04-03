@@ -153,7 +153,7 @@ def main():
 		print('{} - {} / {} results shown'.format(resume + 1, \
 		min((resume + MAX_RESULTS, len(final_ids))), len(final_ids)))
 		resume += MAX_RESULTS
-		if resume > len(final_ids):
+		if resume >= len(final_ids):
 			break
 		print('Show next {}? (y/n)'.format(MAX_RESULTS))
 		inp = input()
