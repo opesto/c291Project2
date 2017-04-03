@@ -25,118 +25,118 @@ def addTerm(termsList, termgroup, prefix, charsId, fp):
 	
 	if "&#" in termgroup and ";" in termgroup:
 		if termgroup[termgroup.index("#")+1:termgroup.index(";")].isdigit():
-			addTerm(termsList, termgroup[:termgroup.index("#")-1], prefix, charsId)
-			addTerm(termsList, termgroup[termgroup.index(";")+1:], prefix, charsId)
+			addTerm(termsList, termgroup[:termgroup.index("#")-1], prefix, charsId, fp)
+			addTerm(termsList, termgroup[termgroup.index(";")+1:], prefix, charsId, fp)
 		else:
-			addTerm(termsList, termgroup, prefix, charsId)
+			addTerm(termsList, termgroup, prefix, charsId, fp)
 	elif "." in termgroup:
 		index = termgroup.index(".")
 		if index != 0:
-			addTerm(termsList, termgroup[:index], prefix, charsId)
+			addTerm(termsList, termgroup[:index], prefix, charsId, fp)
 		if index != len(termgroup) - 1:
-			addTerm(termsList, termgroup[index+1:], prefix, charsId)
+			addTerm(termsList, termgroup[index+1:], prefix, charsId, fp)
 	elif "," in termgroup:
 		index = termgroup.index(",")
 		if index != 0:
-			addTerm(termsList, termgroup[:index], prefix, charsId)
+			addTerm(termsList, termgroup[:index], prefix, charsId, fp)
 		if index != len(termgroup) - 1:
-			addTerm(termsList, termgroup[index+1:], prefix, charsId)
+			addTerm(termsList, termgroup[index+1:], prefix, charsId, fp)
 	elif "!" in termgroup:
 		index = termgroup.index("!")
 		if index != 0:
-			addTerm(termsList, termgroup[:index], prefix, charsId)
+			addTerm(termsList, termgroup[:index], prefix, charsId, fp)
 		if index != len(termgroup) - 1:
-			addTerm(termsList, termgroup[index+1:], prefix, charsId)
+			addTerm(termsList, termgroup[index+1:], prefix, charsId, fp)
 	elif "@" in termgroup:
 		index = termgroup.index("@")
 		if index != 0:
-			addTerm(termsList, termgroup[:index], prefix, charsId)
+			addTerm(termsList, termgroup[:index], prefix, charsId, fp)
 		if index != len(termgroup) - 1:
-			addTerm(termsList, termgroup[index+1:], prefix, charsId)
+			addTerm(termsList, termgroup[index+1:], prefix, charsId, fp)
 	elif "#" in termgroup:
 		index = termgroup.index("#")
 		if index != 0:
-			addTerm(termsList, termgroup[:index], prefix, charsId)
+			addTerm(termsList, termgroup[:index], prefix, charsId, fp)
 		if index != len(termgroup) - 1:
-			addTerm(termsList, termgroup[index+1:], prefix, charsId)
+			addTerm(termsList, termgroup[index+1:], prefix, charsId, fp)
 	elif "$" in termgroup:
 		index = termgroup.index("$")
 		if index != 0:
-			addTerm(termsList, termgroup[:index], prefix, charsId)
+			addTerm(termsList, termgroup[:index], prefix, charsId, fp)
 		if index != len(termgroup) - 1:
-			addTerm(termsList, termgroup[index+1:], prefix, charsId)
+			addTerm(termsList, termgroup[index+1:], prefix, charsId, fp)
 	elif "%" in termgroup:
 		index = termgroup.index("%")
 		if index != 0:
-			addTerm(termsList, termgroup[:index], prefix, charsId)
+			addTerm(termsList, termgroup[:index], prefix, charsId, fp)
 		if index != len(termgroup) - 1:
-			addTerm(termsList, termgroup[index+1:], prefix, charsId)
+			addTerm(termsList, termgroup[index+1:], prefix, charsId, fp)
 	elif "^" in termgroup:
 		index = termgroup.index("^")
 		if index != 0:
-			addTerm(termsList, termgroup[:index], prefix, charsId)
+			addTerm(termsList, termgroup[:index], prefix, charsId, fp)
 		if index != len(termgroup) - 1:
-			addTerm(termsList, termgroup[index+1:], prefix, charsId)
+			addTerm(termsList, termgroup[index+1:], prefix, charsId, fp)
 	elif "&" in termgroup:
 		index = termgroup.index("&")
 		if index != 0:
-			addTerm(termsList, termgroup[:index], prefix, charsId)
+			addTerm(termsList, termgroup[:index], prefix, charsId, fp)
 		if index != len(termgroup) - 1:
-			addTerm(termsList, termgroup[index+1:], prefix, charsId)
+			addTerm(termsList, termgroup[index+1:], prefix, charsId, fp)
 	elif "*" in termgroup:
 		index = termgroup.index("*")
 		if index != 0:
-			addTerm(termsList, termgroup[:index], prefix, charsId)
+			addTerm(termsList, termgroup[:index], prefix, charsId, fp)
 		if index != len(termgroup) - 1:
-			addTerm(termsList, termgroup[index+1:], prefix, charsId)
+			addTerm(termsList, termgroup[index+1:], prefix, charsId, fp)
 	elif "(" in termgroup:
 		index = termgroup.index("(")
 		if index != 0:
-			addTerm(termsList, termgroup[:index], prefix, charsId)
+			addTerm(termsList, termgroup[:index], prefix, charsId, fp)
 		if index != len(termgroup) - 1:
-			addTerm(termsList, termgroup[index+1:], prefix, charsId)
+			addTerm(termsList, termgroup[index+1:], prefix, charsId, fp)
 	elif ")" in termgroup:
 		index = termgroup.index(")")
 		if index != 0:
-			addTerm(termsList, termgroup[:index], prefix, charsId)
+			addTerm(termsList, termgroup[:index], prefix, charsId, fp)
 		if index != len(termgroup) - 1:
-			addTerm(termsList, termgroup[index+1:], prefix, charsId)
+			addTerm(termsList, termgroup[index+1:], prefix, charsId, fp)
 	elif "?" in termgroup:
 		index = termgroup.index("?")
 		if index != 0:
-			addTerm(termsList, termgroup[:index], prefix, charsId)
+			addTerm(termsList, termgroup[:index], prefix, charsId, fp)
 		if index != len(termgroup) - 1:
-			addTerm(termsList, termgroup[index+1:], prefix, charsId)
+			addTerm(termsList, termgroup[index+1:], prefix, charsId, fp)
 	elif "+" in termgroup:
 		index = termgroup.index("+")
 		if index != 0:
-			addTerm(termsList, termgroup[:index], prefix, charsId)
+			addTerm(termsList, termgroup[:index], prefix, charsId, fp)
 		if index != len(termgroup) - 1:
-			addTerm(termsList, termgroup[index+1:], prefix, charsId)
+			addTerm(termsList, termgroup[index+1:], prefix, charsId, fp)
 	elif "/" in termgroup:
 		index = termgroup.index("/")
 		if index != 0:
-			addTerm(termsList, termgroup[:index], prefix, charsId)
+			addTerm(termsList, termgroup[:index], prefix, charsId, fp)
 		if index != len(termgroup) - 1:
-			addTerm(termsList, termgroup[index+1:], prefix, charsId)
+			addTerm(termsList, termgroup[index+1:], prefix, charsId, fp)
 	elif ";" in termgroup:
 		index = termgroup.index(";")
 		if index != 0:
-			addTerm(termsList, termgroup[:index], prefix, charsId)
+			addTerm(termsList, termgroup[:index], prefix, charsId, fp)
 		if index != len(termgroup) - 1:
-			addTerm(termsList, termgroup[index+1:], prefix, charsId)
+			addTerm(termsList, termgroup[index+1:], prefix, charsId, fp)
 	elif "'" in termgroup:
 		index = termgroup.index("'")
 		if index != 0:
-			addTerm(termsList, termgroup[:index], prefix, charsId)
+			addTerm(termsList, termgroup[:index], prefix, charsId, fp)
 		if index != len(termgroup) - 1:
-			addTerm(termsList, termgroup[index+1:], prefix, charsId)
+			addTerm(termsList, termgroup[index+1:], prefix, charsId, fp)
 	elif ":" in termgroup:
 		index = termgroup.index(":")
 		if index != 0:
-			addTerm(termsList, termgroup[:index], prefix, charsId)
+			addTerm(termsList, termgroup[:index], prefix, charsId, fp)
 		if index != len(termgroup) - 1:
-			addTerm(termsList, termgroup[index+1:], prefix, charsId)
+			addTerm(termsList, termgroup[index+1:], prefix, charsId, fp)
 	else:
 		if len(termgroup) > 2:
 			#termsList.append(prefix+termgroup.lower()+":"+charsId)
