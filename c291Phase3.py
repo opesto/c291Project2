@@ -95,11 +95,15 @@ def search_all_terms(database, query, ids):
 				done = True
 	cur.close()
 
-def search_field(database, query, ids):
-	...
+#def search_field(database, query, ids):
+#	...
 
 def search_dates(database, query, ids):
-	...
+	cur = database.cursor()
+	done = False
+	
+
+	return	
 
 def main():
 	queryList = input('query? ').split(' ')
@@ -114,7 +118,7 @@ def main():
 			database.open('te.idx')
 			search_all_terms(database, query, ids)
 			database.close()
-		elif query[0] == 'dates':
+		elif query[0] == 'date':
 			#kiefer
 			database.open('da.idx')
 			search_dates(database, query, ids)
