@@ -1,6 +1,8 @@
 from bsddb3 import db
 import xml.etree.ElementTree as xmltree
 import re
+import time
+import datetime
 
 VALID_OPS = ('text', 'name', 'location', 'date', None)
 MAX_RESULTS = 5
@@ -85,9 +87,7 @@ def fetch_tweets(tids):
 def search_all_terms(database, query, ids, resume):
 	cur = database.cursor()
 	cur.first()
-	done = False
 	status = search_k(query[1], cur)
-	resume = status[1]
 	results = status[0]
 	results = set(results)
 	ids.append(results)
@@ -108,12 +108,49 @@ def search_field(database, query, ids):
 
 def search_dates(database, query, ids):
 	cur = database.cursor()
-	done = False
-	#print(query)
+	cur.first()
+	results = []
+	argDate = query[1]
+	argDate = time.strptime(argDate, "%Y/%m/%d")
+	
+	#Alternative format, if we wish to compare numbers instead of strings
+	#argDate = time.mktime(datetime.datetime.strptime(argDate, "%Y/%m/%d").timetuple())	
 	
 	#case1: provided date is an exact match (datePrefix = ':')
-	
-	return	
+	if query[2] == ':':
+		iterator = cur.current()
+		while iterator:
+			if query[1] == iterator[0].decode('utf-8'):
+				results.append(iterator[1])
+			iterator = cur.next()
+
+	#case2: provided date is greater than argument (datePrefix = '>')
+	elif query[2] == '>':
+		iterator = cur.current()
+		while iterator:
+			curDate = iterator[0].decode('utf-8')
+			curDate = time.strptime(curDate, "%Y/%m/%d")
+			if curDate <= argDate:
+				iterator = cur.next()
+			else:
+				results.append(iterator[1])
+				iterator = cur.next()
+
+	#case3: provided date is less than argument (datePrefix = '<')
+	elif query[2] == '<':
+		iterator = cur.current()
+		while iterator:
+			curDate = iterator[0].decode('utf-8')
+			curDate = time.strptime(curDate, "%Y/%m/%d")
+			if curDate >= argDate:
+				iterator = cur.next()
+			else:
+				results.append(iterator[1])
+				iterator = cur.next()
+
+	ids.append(results)
+	cur.close()
+
 
 def main():
 	queryList = input('query? ').split(' ')
