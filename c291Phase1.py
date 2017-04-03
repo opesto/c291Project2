@@ -3,11 +3,6 @@ import re
 
 #writes the organized data in lists to 3 files terms.txt, dates.txt, and tweets.txt
 def writeToFiles(termsList, datesList, tweetsList):
-	file1 = open("terms.txt", 'a')
-	for term in termsList:
-		file1.writelines(term+"\n")
-	file1.close()
-
 	file2 = open("dates.txt", 'a')
 	for date in datesList:
 		file2.write(date+"\n")
@@ -19,11 +14,10 @@ def writeToFiles(termsList, datesList, tweetsList):
 	file3.close()
 
 def writeOne(fp, term):
-	fp.write(term+"\n")
+	fp.writelines(term+"\n")
 
 def parse(fp, line, prefix, charsId):
 	terms = re.split('[^a-zA-Z0-9]', line)
-	terms_to_remove = []
 	if '&#' in line and ';' in line:
 		if line[line.index('#')+1:line.index(';')].isdigit():
 			terms.remove(line[line.index('#')+1:line.index(';')])
@@ -31,130 +25,6 @@ def parse(fp, line, prefix, charsId):
 		if len(term) > 2:
 			writeOne(fp, prefix + term.lower() + ":" + charsId)
 
-#recursively checks a string for certain illegal term characters such as:
-#!@#$%^&*()+?/ and seperates the string into multiple strings at the index 
-#of the illegal character. The string/strings are then added to termsList.
-def addTerm(termsList, termgroup, prefix, charsId, fp): 
-	
-	if "&#" in termgroup and ";" in termgroup:
-		if termgroup[termgroup.index("#")+1:termgroup.index(";")].isdigit():
-			addTerm(termsList, termgroup[:termgroup.index("#")-1], prefix, charsId, fp)
-			addTerm(termsList, termgroup[termgroup.index(";")+1:], prefix, charsId, fp)
-		else:
-			addTerm(termsList, termgroup, prefix, charsId, fp)
-	elif "." in termgroup:
-		index = termgroup.index(".")
-		if index != 0:
-			addTerm(termsList, termgroup[:index], prefix, charsId, fp)
-		if index != len(termgroup) - 1:
-			addTerm(termsList, termgroup[index+1:], prefix, charsId, fp)
-	elif "," in termgroup:
-		index = termgroup.index(",")
-		if index != 0:
-			addTerm(termsList, termgroup[:index], prefix, charsId, fp)
-		if index != len(termgroup) - 1:
-			addTerm(termsList, termgroup[index+1:], prefix, charsId, fp)
-	elif "!" in termgroup:
-		index = termgroup.index("!")
-		if index != 0:
-			addTerm(termsList, termgroup[:index], prefix, charsId, fp)
-		if index != len(termgroup) - 1:
-			addTerm(termsList, termgroup[index+1:], prefix, charsId, fp)
-	elif "@" in termgroup:
-		index = termgroup.index("@")
-		if index != 0:
-			addTerm(termsList, termgroup[:index], prefix, charsId, fp)
-		if index != len(termgroup) - 1:
-			addTerm(termsList, termgroup[index+1:], prefix, charsId, fp)
-	elif "#" in termgroup:
-		index = termgroup.index("#")
-		if index != 0:
-			addTerm(termsList, termgroup[:index], prefix, charsId, fp)
-		if index != len(termgroup) - 1:
-			addTerm(termsList, termgroup[index+1:], prefix, charsId, fp)
-	elif "$" in termgroup:
-		index = termgroup.index("$")
-		if index != 0:
-			addTerm(termsList, termgroup[:index], prefix, charsId, fp)
-		if index != len(termgroup) - 1:
-			addTerm(termsList, termgroup[index+1:], prefix, charsId, fp)
-	elif "%" in termgroup:
-		index = termgroup.index("%")
-		if index != 0:
-			addTerm(termsList, termgroup[:index], prefix, charsId, fp)
-		if index != len(termgroup) - 1:
-			addTerm(termsList, termgroup[index+1:], prefix, charsId, fp)
-	elif "^" in termgroup:
-		index = termgroup.index("^")
-		if index != 0:
-			addTerm(termsList, termgroup[:index], prefix, charsId, fp)
-		if index != len(termgroup) - 1:
-			addTerm(termsList, termgroup[index+1:], prefix, charsId, fp)
-	elif "&" in termgroup:
-		index = termgroup.index("&")
-		if index != 0:
-			addTerm(termsList, termgroup[:index], prefix, charsId, fp)
-		if index != len(termgroup) - 1:
-			addTerm(termsList, termgroup[index+1:], prefix, charsId, fp)
-	elif "*" in termgroup:
-		index = termgroup.index("*")
-		if index != 0:
-			addTerm(termsList, termgroup[:index], prefix, charsId, fp)
-		if index != len(termgroup) - 1:
-			addTerm(termsList, termgroup[index+1:], prefix, charsId, fp)
-	elif "(" in termgroup:
-		index = termgroup.index("(")
-		if index != 0:
-			addTerm(termsList, termgroup[:index], prefix, charsId, fp)
-		if index != len(termgroup) - 1:
-			addTerm(termsList, termgroup[index+1:], prefix, charsId, fp)
-	elif ")" in termgroup:
-		index = termgroup.index(")")
-		if index != 0:
-			addTerm(termsList, termgroup[:index], prefix, charsId, fp)
-		if index != len(termgroup) - 1:
-			addTerm(termsList, termgroup[index+1:], prefix, charsId, fp)
-	elif "?" in termgroup:
-		index = termgroup.index("?")
-		if index != 0:
-			addTerm(termsList, termgroup[:index], prefix, charsId, fp)
-		if index != len(termgroup) - 1:
-			addTerm(termsList, termgroup[index+1:], prefix, charsId, fp)
-	elif "+" in termgroup:
-		index = termgroup.index("+")
-		if index != 0:
-			addTerm(termsList, termgroup[:index], prefix, charsId, fp)
-		if index != len(termgroup) - 1:
-			addTerm(termsList, termgroup[index+1:], prefix, charsId, fp)
-	elif "/" in termgroup:
-		index = termgroup.index("/")
-		if index != 0:
-			addTerm(termsList, termgroup[:index], prefix, charsId, fp)
-		if index != len(termgroup) - 1:
-			addTerm(termsList, termgroup[index+1:], prefix, charsId, fp)
-	elif ";" in termgroup:
-		index = termgroup.index(";")
-		if index != 0:
-			addTerm(termsList, termgroup[:index], prefix, charsId, fp)
-		if index != len(termgroup) - 1:
-			addTerm(termsList, termgroup[index+1:], prefix, charsId, fp)
-	elif "'" in termgroup:
-		index = termgroup.index("'")
-		if index != 0:
-			addTerm(termsList, termgroup[:index], prefix, charsId, fp)
-		if index != len(termgroup) - 1:
-			addTerm(termsList, termgroup[index+1:], prefix, charsId, fp)
-	elif ":" in termgroup:
-		index = termgroup.index(":")
-		if index != 0:
-			addTerm(termsList, termgroup[:index], prefix, charsId, fp)
-		if index != len(termgroup) - 1:
-			addTerm(termsList, termgroup[index+1:], prefix, charsId, fp)
-	else:
-		if len(termgroup) > 2:
-			#termsList.append(prefix+termgroup.lower()+":"+charsId)
-			writeOne(fp, prefix + termgroup.lower() + ":" + charsId)
-			
 def main():
 	termsList = []
 	datesList = []
@@ -249,6 +119,7 @@ def main():
 	file1.close()
 	file2.close()
 	file3.close()
+	writeToFiles(termsList, datesList, tweetsList)
 		
 main()
 		
