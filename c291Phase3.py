@@ -1,5 +1,6 @@
 from bsddb3 import db
 import xml.etree.ElementTree as xmltree
+import re
 
 VALID_OPS = ('text', 'name', 'location', 'date', None)
 MAX_RESULTS = 5
@@ -48,17 +49,26 @@ def print_results_tw(results):
 			print(element.text)
 
 # search a text field for a keyword
-def search_k(keyword, cur, num=float('inf'), resume=None):
+def search_k(keyword, cur, num=float('inf'), resume=None, prefix='^[tbln]-'):
 	if resume:
 		iterator = cur.set(resume)
 	else:
 		iterator = cur.first()
 	results = []
+	_keyword = []
+	for i in range(len(keyword)):
+		if keyword[i] == '%':
+			_keyword.append('.*')
+		else:
+			_keyword.append(keyword[i])
+	if '%' not in keyword:
+		_keyword.insert(0, prefix)
+	keyword = ''.join(_keyword)
 	while iterator:
-		if keyword in iterator[0].decode('utf-8'):
+		if re.search(keyword, iterator[0].decode('utf-8'), flags=re.I | re.M):
 			results.append(iterator[1])
-		if len(results) >= num:
-			return (results, iterator[0])
+			if len(results) >= num:
+				return (results, iterator[0])
 		iterator = cur.next()
 	return (results, None)
 
@@ -82,7 +92,8 @@ def search_all_terms(database, query, ids):
 	done = False
 	resume = None
 	while not done:
-		status = search_k(query[1], cur, MAX_RESULTS, resume)
+		status = search_k(query[1], cur, num=MAX_RESULTS, resume=resume)
+		print(status)
 		resume = status[1]
 		results = status[0]
 		results = set(results)
@@ -95,8 +106,18 @@ def search_all_terms(database, query, ids):
 				done = True
 	cur.close()
 
-#def search_field(database, query, ids):
-#	...
+def search_field(database, query, ids):
+	# I moved to regex for the wildcard functionality and in doing so
+	# made this a bit easier for you, when you call the search_k function
+	# it now has an optional argument called prefix that affects what matches
+	# long story short, it looks like
+	# ^[tbln]-
+	# and will match for any characters in the square brackets
+	# i.e.:
+	# ^[t]-			makes it match any term of the form t-
+	# ^[tn]-		matches terms like t- or n-
+	# etc
+	return
 
 def search_dates(database, query, ids):
 	cur = database.cursor()
