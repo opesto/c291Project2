@@ -49,11 +49,7 @@ def print_results_tw(results):
 			print(element.text)
 
 # search a text field for a keyword
-def search_k(keyword, cur, num=float('inf'), resume=None, prefix='^[tbln]-'):
-	if resume:
-		iterator = cur.set(resume)
-	else:
-		iterator = cur.first()
+def search_k(keyword, cur, prefix='^[tbln]-'):
 	results = []
 	_keyword = []
 	for i in range(len(keyword)):
@@ -64,11 +60,10 @@ def search_k(keyword, cur, num=float('inf'), resume=None, prefix='^[tbln]-'):
 	if '%' not in keyword:
 		_keyword.insert(0, prefix)
 	keyword = ''.join(_keyword)
+	iterator = cur.current()
 	while iterator:
 		if re.search(keyword, iterator[0].decode('utf-8'), flags=re.I | re.M):
 			results.append(iterator[1])
-			if len(results) >= num:
-				return (results, iterator[0])
 		iterator = cur.next()
 	return (results, None)
 
@@ -87,23 +82,15 @@ def fetch_tweets(tids):
 		print(parsed_tweet[2].text)
 		print('{}\n'.format(parsed_tweet[1].text))
 
-def search_all_terms(database, query, ids):
+def search_all_terms(database, query, ids, resume):
 	cur = database.cursor()
+	cur.first()
 	done = False
-	resume = None
-	while not done:
-		status = search_k(query[1], cur, num=MAX_RESULTS, resume=resume)
-		print(status)
-		resume = status[1]
-		results = status[0]
-		results = set(results)
-		ids.append(results)
-		if resume is None:
-			done = True
-		else:
-			inp = input('\n See next {} results (y/n)?'.format(MAX_RESULTS))
-			if inp == 'n':
-				done = True
+	status = search_k(query[1], cur)
+	resume = status[1]
+	results = status[0]
+	results = set(results)
+	ids.append(results)
 	cur.close()
 
 def search_field(database, query, ids):
@@ -137,7 +124,8 @@ def main():
 		database = db.DB()
 		if query[0] == None:
 			database.open('te.idx')
-			search_all_terms(database, query, ids)
+			resume = None
+			search_all_terms(database, query, ids, resume)
 			database.close()
 		elif query[0] == 'date':
 			#kiefer
