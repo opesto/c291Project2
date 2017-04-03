@@ -1,5 +1,6 @@
 import os
 import re
+ILLEGAL_NAMES = ['text', 'user', 'description', 'url', 'status', 'name', 'location']
 
 #writes the organized data in lists to 3 files terms.txt, dates.txt, and tweets.txt
 def writeToFiles(termsList, datesList, tweetsList):
@@ -17,11 +18,24 @@ def writeOne(fp, term):
 	fp.writelines(term+"\n")
 
 def parse(fp, line, prefix, charsId):
-	terms = re.split('[^a-zA-Z0-9]', line)
+	terms = re.split('[^a-zA-Z0-9_]', line)
 	if '&#' in line and ';' in line:
-		if line[line.index('#')+1:line.index(';')].isdigit():
-			terms.remove(line[line.index('#')+1:line.index(';')])
+		isChinese = True
+	if '&#' in line and ';' in line:
+		while isChinese:
+			if '&#' in line and ';' in line:
+				stop = line.index(';')
+				terms.remove(line[line.index('#')+1:stop])
+				line = line[stop+1:]
+			else:
+				isChinese = False
 	for term in terms:
+		if prefix == 'n-' and (term in ILLEGAL_NAMES):
+			continue
+		elif prefix == 'l-' and (term in ILLEGAL_NAMES):
+			continue
+		elif prefix == 't-' and (term == 'text'):
+			continue
 		if len(term) > 2:
 			writeOne(fp, prefix + term.lower() + ":" + charsId)
 
@@ -34,7 +48,7 @@ def main():
 	if os.path.isfile("terms.txt"):
 		os.remove("terms.txt")
 	file1 = open("terms.txt", 'a')
-	if os.path.isfile("terms.txt"):
+	if os.path.isfile("dates.txt"):
 		os.remove("dates.txt")
 	file2 = open("dates.txt", 'a')
 	if os.path.isfile("tweets.txt"):
@@ -50,16 +64,13 @@ def main():
 			for wordIndex in range(len(lineList)):
 				if wordIndex > 2:
 					if lineList[wordIndex][-7:] == "</text>":
-						#addTerm(termsList, lineList[wordIndex][:-7], "t-", charsId, file1)
 						parse(file1, lineList[wordIndex][:-7], "t-", charsId) 
 						break
 
 					if len(lineList[wordIndex]) > 2:
 						if wordIndex == 3:
-							#addTerm(termsList, lineList[wordIndex][6:], "t-", charsId, file1)
 							parse(file1, lineList[wordIndex][6:], "t-", charsId) 
 						else:
-							#addTerm(termsList, lineList[wordIndex], "t-", charsId, file1)
 							parse(file1, lineList[wordIndex], "t-", charsId) 
 
 			#add name terms to termsList
@@ -67,16 +78,16 @@ def main():
 			for wordIndex in range(len(lineList)):
 				if lineList[wordIndex][:6] == "<name>":
 					add = True
-					#addTerm(termsList, lineList[wordIndex][6:], "n-", charsId, file2)
-					parse(file1, lineList[wordIndex][6:], "n-", charsId) 
+					if "<name>" in lineList[wordIndex] and "<\name>" in lineList[wordIndex]:
+						parse(file1, lineList[wordIndex][6:-7], "n-", charsId)
+					else:
+						parse(file1, lineList[wordIndex][6:], "n-", charsId)
 				elif lineList[wordIndex][-7:] == "</name>":
-					#addTerm(termsList, lineList[wordIndex][:-7], "n-", charsId, file2)
 					parse(file1, lineList[wordIndex][:-7], "n-", charsId) 
 					add = False
 					break
 				else:
 					if add:
-						#addTerm(termsList, lineList[wordIndex], "n-", charsId, file2)
 						parse(file1, lineList[wordIndex], "n-", charsId) 
 
 			#add location terms to termsList
@@ -84,16 +95,13 @@ def main():
 			for wordIndex in range(len(lineList)):
 				if lineList[wordIndex][:10] == "<location>":
 					add = True
-					#addTerm(termsList, lineList[wordIndex][10:], "l-", charsId, file3)
 					parse(file1, lineList[wordIndex][10:], "l-", charsId) 
 				elif lineList[wordIndex][-11:] == "</location>":
-					#addTerm(termsList, lineList[wordIndex][:-11], "l-", charsId, file3)
 					parse(file1, lineList[wordIndex][:-11], "l-", charsId) 
 					add = False
 					break
 				else:
 					if add:
-						#addTerm(termsList, lineList[wordIndex], "l-", charsId, file3)
 						parse(file1, lineList[wordIndex], "l-", charsId) 
 
 			#create dates.txt file
