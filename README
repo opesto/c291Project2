@@ -1,0 +1,20 @@
+CMPUT 291 Project 2
+Winter 2017
+
+Olivier Preston <opreston@ualberta.ca>
+Jonah Quist <jquist@ualberta.ca>
+Kiefer von Gaza <kvongaza@ualberta.ca>
+
+# Instructions
+
+Run c291Phase1.py, it will ask for an input file and generate tweets.txt, terms.txt, dates.txt
+
+python3 c291Phase1.py
+
+Next run phase2script.sh, it will generate indices based on the output of phase 1
+
+sh phase2script.sh
+
+Finally, use c291Phase3.py to access the indices with a basic query grammar
+
+python3 c291Phase3.py
