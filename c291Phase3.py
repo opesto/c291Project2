@@ -132,6 +132,7 @@ def search_dates(database, query, ids):
 				results.append(iterator[1])
 				iterator = cur.next()
 	
+	results = set(results)
 	ids.append(results)
 	cur.close()
 
