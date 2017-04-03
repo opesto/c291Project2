@@ -15,10 +15,13 @@ def writeToFiles(termsList, datesList, tweetsList):
 		file3.write(tweet+"\n")
 	file3.close()
 
+def writeOne(fp, term):
+	fp.write(term+"\n")
+
 #recursively checks a string for certain illegal term characters such as:
 #!@#$%^&*()+?/ and seperates the string into multiple strings at the index 
 #of the illegal character. The string/strings are then added to termsList.
-def addTerm(termsList, termgroup, prefix, charsId): 
+def addTerm(termsList, termgroup, prefix, charsId, fp): 
 	
 	if "&#" in termgroup and ";" in termgroup:
 		if termgroup[termgroup.index("#")+1:termgroup.index(";")].isdigit():
@@ -136,7 +139,8 @@ def addTerm(termsList, termgroup, prefix, charsId):
 			addTerm(termsList, termgroup[index+1:], prefix, charsId)
 	else:
 		if len(termgroup) > 2:
-			termsList.append(prefix+termgroup.lower()+":"+charsId)
+			#termsList.append(prefix+termgroup.lower()+":"+charsId)
+			writeOne(fp, prefix + termgroup.lower() + ":" + charsId)
 			
 def main():
 	termsList = []
@@ -144,6 +148,9 @@ def main():
 	tweetsList = []
 	fname = input("File to open: ")
 	file = open(fname, "r")
+	file1 = open("terms.txt", 'a')
+	file2 = open("dates.txt", 'a')
+	file3 = open("tweets.txt", 'a')
 	for line in file:
 		lineList = line.split()
 		if (len(lineList) >= 4):
@@ -211,7 +218,9 @@ def main():
 			tweetsList.append(tweetString)
 
 	file.close()
-	writeToFiles(termsList, datesList, tweetsList)
+	file1.close()
+	file2.close()
+	file3.close()
 		
 main()
 		
