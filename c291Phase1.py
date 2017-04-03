@@ -161,42 +161,42 @@ def main():
 			for wordIndex in range(len(lineList)):
 				if wordIndex > 2:
 					if lineList[wordIndex][-7:] == "</text>":
-						addTerm(termsList, lineList[wordIndex][:-7], "t-", charsId)
+						addTerm(termsList, lineList[wordIndex][:-7], "t-", charsId, file1)
 						break
 
 					if len(lineList[wordIndex]) > 2:
 						if wordIndex == 3:
-							addTerm(termsList, lineList[wordIndex][6:], "t-", charsId)
+							addTerm(termsList, lineList[wordIndex][6:], "t-", charsId, file1)
 						else:
-							addTerm(termsList, lineList[wordIndex], "t-", charsId)
+							addTerm(termsList, lineList[wordIndex], "t-", charsId, file1)
 
 			#add name terms to termsList
 			add = False
 			for wordIndex in range(len(lineList)):
 				if lineList[wordIndex][:6] == "<name>":
 					add = True
-					addTerm(termsList, lineList[wordIndex][6:], "n-", charsId)
+					addTerm(termsList, lineList[wordIndex][6:], "n-", charsId, file2)
 				elif lineList[wordIndex][-7:] == "</name>":
-					addTerm(termsList, lineList[wordIndex][:-7], "n-", charsId)
+					addTerm(termsList, lineList[wordIndex][:-7], "n-", charsId, file2)
 					add = False
 					break
 				else:
 					if add:
-						addTerm(termsList, lineList[wordIndex], "n-", charsId)
+						addTerm(termsList, lineList[wordIndex], "n-", charsId, file2)
 
 			#add location terms to termsList
 			add = False
 			for wordIndex in range(len(lineList)):
 				if lineList[wordIndex][:10] == "<location>":
 					add = True
-					addTerm(termsList, lineList[wordIndex][10:], "l-", charsId)
+					addTerm(termsList, lineList[wordIndex][10:], "l-", charsId, file3)
 				elif lineList[wordIndex][-11:] == "</location>":
-					addTerm(termsList, lineList[wordIndex][:-11], "l-", charsId)
+					addTerm(termsList, lineList[wordIndex][:-11], "l-", charsId, file3)
 					add = False
 					break
 				else:
 					if add:
-						addTerm(termsList, lineList[wordIndex], "l-", charsId)
+						addTerm(termsList, lineList[wordIndex], "l-", charsId, file3)
 
 			#create dates.txt file
 			charsDate = []
