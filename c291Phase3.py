@@ -93,26 +93,12 @@ def search_text(database, query, ids, prefix='^[tln]-'):
 	ids.append(results)
 	cur.close()
 
-def search_field(database, query, ids):
-	# I moved to regex for the wildcard functionality and in doing so
-	# made this a bit easier for you, when you call the search_k function
-	# it now has an optional argument called prefix that affects what matches
-	# long story short, it looks like
-	# ^[tbln]-
-	# and will match for any characters in the square brackets
-	# i.e.:
-	# ^[t]-			makes it match any term of the form t-
-	# ^[tn]-		matches terms like t- or n-
-	# etc
-	return
-
 def search_dates(database, query, ids):
 	cur = database.cursor()
 	cur.first()
 	results = []
 	argDate = query[1]
 	argDate = time.strptime(argDate, "%Y/%m/%d")
-	
 	#Alternative format, if we wish to compare numbers instead of strings
 	#argDate = time.mktime(datetime.datetime.strptime(argDate, "%Y/%m/%d").timetuple())	
 	
@@ -123,7 +109,6 @@ def search_dates(database, query, ids):
 			if query[1] == iterator[0].decode('utf-8'):
 				results.append(iterator[1])
 			iterator = cur.next()
-
 	#case2: provided date is greater than argument (datePrefix = '>')
 	elif query[2] == '>':
 		iterator = cur.current()
@@ -135,7 +120,6 @@ def search_dates(database, query, ids):
 			else:
 				results.append(iterator[1])
 				iterator = cur.next()
-
 	#case3: provided date is less than argument (datePrefix = '<')
 	elif query[2] == '<':
 		iterator = cur.current()
@@ -147,7 +131,7 @@ def search_dates(database, query, ids):
 			else:
 				results.append(iterator[1])
 				iterator = cur.next()
-
+	
 	ids.append(results)
 	cur.close()
 
