@@ -122,8 +122,10 @@ def search_field(database, query, ids):
 def search_dates(database, query, ids):
 	cur = database.cursor()
 	done = False
+	#print(query)
 	
-
+	#case1: provided date is an exact match (datePrefix = ':')
+	
 	return	
 
 def main():
