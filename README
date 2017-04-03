@@ -13,7 +13,7 @@ python3 c291Phase1.py
 
 Next run phase2script.sh, it will generate indices based on the output of phase 1
 
-sh phase2script.sh
+./phase2script.sh
 
 Finally, use c291Phase3.py to access the indices with a basic query grammar
 

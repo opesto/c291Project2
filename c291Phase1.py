@@ -76,16 +76,16 @@ def main():
 			#add name terms to termsList
 			add = False
 			for wordIndex in range(len(lineList)):
-				if lineList[wordIndex][:6] == "<name>":
-					add = True
-					if "<name>" in lineList[wordIndex] and "<\name>" in lineList[wordIndex]:
-						parse(file1, lineList[wordIndex][6:-7], "n-", charsId)
-					else:
-						parse(file1, lineList[wordIndex][6:], "n-", charsId)
-				elif lineList[wordIndex][-7:] == "</name>":
+				if lineList[wordIndex][-7:] == "</name>":
 					parse(file1, lineList[wordIndex][:-7], "n-", charsId) 
 					add = False
 					break
+				if lineList[wordIndex][:6] == "<name>":
+					add = True
+					if "<name>" in lineList[wordIndex] and "</name>" in lineList[wordIndex]:
+						parse(file1, lineList[wordIndex][6:-7], "n-", charsId)
+					else:
+						parse(file1, lineList[wordIndex][6:], "n-", charsId)
 				else:
 					if add:
 						parse(file1, lineList[wordIndex], "n-", charsId) 
@@ -93,13 +93,13 @@ def main():
 			#add location terms to termsList
 			add = False
 			for wordIndex in range(len(lineList)):
-				if lineList[wordIndex][:10] == "<location>":
-					add = True
-					parse(file1, lineList[wordIndex][10:], "l-", charsId) 
-				elif lineList[wordIndex][-11:] == "</location>":
+				if lineList[wordIndex][-11:] == "</location>":
 					parse(file1, lineList[wordIndex][:-11], "l-", charsId) 
 					add = False
 					break
+				if lineList[wordIndex][:10] == "<location>":
+					add = True
+					parse(file1, lineList[wordIndex][10:], "l-", charsId) 
 				else:
 					if add:
 						parse(file1, lineList[wordIndex], "l-", charsId) 
