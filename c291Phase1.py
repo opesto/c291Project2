@@ -137,11 +137,13 @@ def addTerm(termsList, termgroup, prefix, charsId):
 	else:
 		if len(termgroup) > 2:
 			termsList.append(prefix+termgroup.lower()+":"+charsId)
+			
 def main():
 	termsList = []
 	datesList = []
 	tweetsList = []
-	file = open("10Records.xml", "r")
+	fname = input("File to open: ")
+	file = open(fname, "r")
 	for line in file:
 		lineList = line.split()
 		if (len(lineList) >= 4):
